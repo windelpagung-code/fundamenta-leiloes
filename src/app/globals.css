@@ -1,26 +1,175 @@
-@import "tailwindcss";
+/* Fundamenta Leilões - Global Styles */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary: #0A2E50;
+  --color-primary-light: #0d3d6b;
+  --color-secondary: #1E6BB8;
+  --color-secondary-light: #2980d9;
+  --color-gray-dark: #333333;
+  --color-gray-medium: #666666;
+  --color-gray-light: #999999;
+  --color-offwhite: #F8F8F8;
+  --color-emerald: #2ECC71;
+  --color-emerald-dark: #27ae60;
+  --color-gold: #FFD700;
+  --color-danger: #e74c3c;
+  --color-warning: #f39c12;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+html {
+  color: #333333;
+  background-color: #F8F8F8;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #0A2E50;
+}
+
+input, textarea, select, button {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+.btn-primary {
+  background-color: #1E6BB8;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+.btn-primary:hover {
+  background-color: #2980d9;
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #1E6BB8;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: 2px solid #1E6BB8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-size: 0.9375rem;
+}
+.btn-outline:hover {
+  background-color: #1E6BB8;
+  color: white;
+}
+
+.card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(10, 46, 80, 0.08);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card:hover {
+  box-shadow: 0 4px 20px rgba(10, 46, 80, 0.15);
+  transform: translateY(-2px);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: "Montserrat", sans-serif;
+}
+.badge-success { background-color: rgba(46, 204, 113, 0.15); color: #27ae60; }
+.badge-warning { background-color: rgba(243, 156, 18, 0.15); color: #f39c12; }
+.badge-info { background-color: rgba(30, 107, 184, 0.15); color: #1E6BB8; }
+.badge-premium { background-color: rgba(255, 215, 0, 0.15); color: #a0830a; }
+.badge-danger { background-color: rgba(231, 76, 60, 0.15); color: #e74c3c; }
+
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 0.875rem;
+  color: #333333;
+  background-color: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+.input-field:focus {
+  border-color: #1E6BB8;
+  box-shadow: 0 0 0 3px rgba(30, 107, 184, 0.1);
+}
+.input-field::placeholder { color: #999999; }
+
+.discount-badge {
+  background: linear-gradient(135deg, #2ECC71, #27ae60);
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #F8F8F8; }
+::-webkit-scrollbar-thumb { background: #1E6BB8; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #0A2E50; }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }

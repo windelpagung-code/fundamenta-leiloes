@@ -1,0 +1,237 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  phone         String?
+  cpf           String?   @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  plan                 Plan     @default(FREE)
+  planExpiresAt        DateTime?
+  stripeCustomerId     String?  @unique
+  stripeSubscriptionId String?  @unique
+
+  notifyNewAuctions   Boolean @default(true)
+  notifyStatusChanges Boolean @default(true)
+  notifyDeadlines     Boolean @default(true)
+
+  savedProperties   SavedProperty[]
+  financialAnalyses FinancialAnalysis[]
+  bidderJournals    BidderJournal[]
+  notifications     Notification[]
+
+  @@map("users")
+}
+
+enum Plan {
+  FREE
+  PREMIUM
+}
+
+model Property {
+  id                 String   @id @default(cuid())
+  title              String
+  description        String?  @db.Text
+  mainImage          String?
+  galleryImages      Json?
+  address            String
+  city               String
+  state              String
+  zipCode            String?
+  latitude           Float?
+  longitude          Float?
+  marketValue        Float
+  initialBid         Float
+  discountPercentage Float
+  auctionDate        DateTime
+  auctionTime        String?
+  occupationStatus   OccupationStatus @default(UNKNOWN)
+  propertyType       PropertyType
+  sourceBank         String?
+  sourceAuctioneer   String?
+  registrationNumber String?
+  legalIssues        Json?
+  areaTotal          Float?
+  areaPrivate        Float?
+  active             Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  auction           Auction?
+  savedBy           SavedProperty[]
+  financialAnalyses FinancialAnalysis[]
+  bidderJournals    BidderJournal[]
+
+  @@map("properties")
+}
+
+enum OccupationStatus {
+  OCCUPIED
+  VACANT
+  UNKNOWN
+}
+
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  LAND
+  COMMERCIAL
+  RURAL
+}
+
+model Auction {
+  id                      String  @id @default(cuid())
+  propertyId              String  @unique
+  auctioneerName          String
+  auctioneerWebsite       String?
+  officialNoticeUrl       String?
+  registrationDocumentUrl String?
+  modalidade              String?
+  auctionNumber           String?
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("auctions")
+}
+
+model SavedProperty {
+  id         String   @id @default(cuid())
+  userId     String
+  propertyId String
+  savedAt    DateTime @default(now())
+  notes      String?  @db.Text
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, propertyId])
+  @@map("saved_properties")
+}
+
+model FinancialAnalysis {
+  id                     String        @id @default(cuid())
+  userId                 String
+  propertyId             String
+  bidValue               Float
+  paymentMethod          PaymentMethod
+  downPaymentPercentage  Float?
+  financingTermMonths    Int?
+  financingInterestRate  Float?
+  auctioneerFeePercentage Float         @default(5)
+  documentationCosts     Float
+  evictionCosts          Float
+  renovationBudget       Float
+  totalOperationCost     Float
+  estimatedROI           Float
+  estimatedNetProfit     Float
+  marketPricePerSqMeter  Float?
+  potentialAppreciation  Float?
+  aiAnalysis             Json?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("financial_analyses")
+}
+
+enum PaymentMethod {
+  CASH
+  FINANCING
+}
+
+model BidderJournal {
+  id                       String         @id @default(cuid())
+  userId                   String
+  propertyId               String
+  evictionStatus           EvictionStatus @default(PENDING)
+  actualEvictionCosts      Float          @default(0)
+  actualDocumentationCosts Float          @default(0)
+  actualRenovationCosts    Float          @default(0)
+  notes                    String?        @db.Text
+  acquiredAt               DateTime?
+  acquiredValue            Float?
+  targetSaleValue          Float?
+  createdAt                DateTime       @default(now())
+  updatedAt                DateTime       @updatedAt
+
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property      Property          @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  renovationLog RenovationEntry[]
+  documents     JournalDocument[]
+
+  @@map("bidder_journals")
+}
+
+enum EvictionStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+model RenovationEntry {
+  id          String   @id @default(cuid())
+  journalId   String
+  date        DateTime
+  description String   @db.Text
+  cost        Float
+  photoUrls   Json?
+  stage       String?
+  createdAt   DateTime @default(now())
+
+  journal BidderJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)
+
+  @@map("renovation_entries")
+}
+
+model JournalDocument {
+  id         String   @id @default(cuid())
+  journalId  String
+  name       String
+  url        String
+  type       String
+  uploadedAt DateTime @default(now())
+
+  journal BidderJournal @relation(fields: [journalId], references: [id], onDelete: Cascade)
+
+  @@map("journal_documents")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String   @db.Text
+  type      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model PropertyAIAnalysis {
+  id                 String   @id @default(cuid())
+  registrationNumber String   @unique
+  uf                 String
+  analysisHtml       String   @db.LongText
+  riskLevel          String   // "BAIXO" | "MEDIO" | "ALTO"
+  createdAt          DateTime @default(now())
+
+  @@map("property_ai_analyses")
+}

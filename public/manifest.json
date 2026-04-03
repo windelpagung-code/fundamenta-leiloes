@@ -1,0 +1,27 @@
+{
+  "name": "Fundamenta Leilões",
+  "short_name": "Fundamenta",
+  "description": "Inteligência em Leilões de Imóveis - Análise por IA e Calculadora Financeira",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#F8F8F8",
+  "theme_color": "#0A2E50",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "real-estate", "productivity"],
+  "lang": "pt-BR",
+  "dir": "ltr"
+}

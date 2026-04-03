@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Base/pillar top -->
+  <rect x="50" y="40" width="100" height="12" rx="4" fill="#0A2E50"/>
+  <!-- Column lines -->
+  <rect x="65" y="52" width="12" height="60" fill="#0A2E50"/>
+  <rect x="83" y="52" width="12" height="60" fill="#0A2E50"/>
+  <rect x="101" y="52" width="12" height="60" fill="#0A2E50"/>
+  <rect x="119" y="52" width="12" height="60" fill="#0A2E50"/>
+  <!-- Trapezoid base effect -->
+  <polygon points="58,112 142,112 150,124 50,124" fill="#0A2E50"/>
+  <!-- Text FUNDAMENTA -->
+  <text x="100" y="152" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="18" fill="#0A2E50" text-anchor="middle">FUNDAMENTA</text>
+  <!-- Text LEILÕES -->
+  <text x="100" y="172" font-family="Montserrat, Arial, sans-serif" font-weight="400" font-size="12" fill="#1E6BB8" text-anchor="middle" letter-spacing="4">LEILÕES</text>
+</svg>
