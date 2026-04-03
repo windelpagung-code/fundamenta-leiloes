@@ -20,18 +20,26 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
 
-    if (result?.error) {
-      setError('Email ou senha inválidos. Tente: demo@fundamentaleiloes.com.br / demo123');
+      if (result?.error) {
+        setError('Email ou senha inválidos. Verifique suas credenciais e tente novamente.');
+        setLoading(false);
+      } else if (result?.ok) {
+        router.push('/dashboard');
+        router.refresh();
+      } else {
+        setError('Erro ao entrar. Tente novamente.');
+        setLoading(false);
+      }
+    } catch {
+      setError('Erro de conexão. Tente novamente.');
       setLoading(false);
-    } else {
-      router.push('/dashboard');
-      router.refresh();
     }
   }
 
@@ -167,10 +175,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <div style={{ marginTop: '1.5rem', padding: '1rem', backgroundColor: 'rgba(30, 107, 184, 0.08)', borderRadius: '8px', fontSize: '0.8rem', color: '#666' }}>
-            <strong style={{ color: '#0A2E50', display: 'block', marginBottom: '0.25rem' }}>Conta Demo:</strong>
-            <span>demo@fundamentaleiloes.com.br / demo123</span>
-          </div>
         </div>
       </div>
     </div>
