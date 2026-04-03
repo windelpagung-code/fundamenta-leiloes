@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -229,7 +230,7 @@ model PropertyAIAnalysis {
   id                 String   @id @default(cuid())
   registrationNumber String   @unique
   uf                 String
-  analysisHtml       String   @db.LongText
+  analysisHtml       String   @db.Text
   riskLevel          String   // "BAIXO" | "MEDIO" | "ALTO"
   createdAt          DateTime @default(now())
 
