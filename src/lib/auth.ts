@@ -41,12 +41,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        // Try DB first
+        // Try DB first (with timeout to avoid hanging)
         try {
           const { prisma } = await import('@/lib/db');
-          const user = await prisma.user.findUnique({
+          const dbPromise = prisma.user.findUnique({
             where: { email: credentials.email as string },
           });
+          const timeout = new Promise<null>((_, reject) =>
+            setTimeout(() => reject(new Error('DB timeout')), 5000)
+          );
+          const user = await Promise.race([dbPromise, timeout]);
 
           if (user && user.password) {
             const isValid = await bcrypt.compare(
@@ -64,7 +68,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
           }
         } catch {
-          // DB not available, fall through to mock users
+          // DB not available or timed out, fall through to mock users
         }
 
         // Fallback: mock users for development
